@@ -40,6 +40,8 @@ public class MainViewModel : INotifyPropertyChanged
     private readonly DispatcherTimer _islcTimer = new();
     private readonly DispatcherTimer _ramTimer = new();
     private readonly DispatcherTimer _autoAcceptTimer = new();
+    private readonly DispatcherTimer _antiAfkTimer = new();
+    private readonly DispatcherTimer _autoHealthTimer = new();
     private string _ramInfo = "";
     private string _dashboardInfo = "";
     private bool _showLog;
@@ -198,6 +200,12 @@ public class MainViewModel : INotifyPropertyChanged
         _autoAcceptTimer.Interval = TimeSpan.FromSeconds(1);
         _autoAcceptTimer.Tick += (_, _) => AutoAcceptTick();
 
+        _antiAfkTimer.Interval = TimeSpan.FromSeconds(30);
+        _antiAfkTimer.Tick += (_, _) => AntiAfkTick();
+
+        _autoHealthTimer.Interval = TimeSpan.FromSeconds(5);
+        _autoHealthTimer.Tick += (_, _) => AutoHealthTick();
+
         LoadCategories();
         LoadTweaks();
         LoadSettings();
@@ -276,6 +284,32 @@ public class MainViewModel : INotifyPropertyChanged
                 var hwnd = proc.MainWindowHandle;
                 System.Windows.Forms.SendKeys.SendWait("{ENTER}");
             }
+        }
+        catch { }
+    }
+
+    private void AntiAfkTick()
+    {
+        try
+        {
+            var procs = System.Diagnostics.Process.GetProcessesByName("PointBlank");
+            if (procs.Length == 0) procs = System.Diagnostics.Process.GetProcessesByName("PB");
+            if (procs.Length == 0) return;
+            System.Windows.Forms.SendKeys.SendWait("{w}");
+            System.Threading.Thread.Sleep(50);
+            System.Windows.Forms.SendKeys.SendWait("{s}");
+        }
+        catch { }
+    }
+
+    private void AutoHealthTick()
+    {
+        try
+        {
+            var procs = System.Diagnostics.Process.GetProcessesByName("PointBlank");
+            if (procs.Length == 0) procs = System.Diagnostics.Process.GetProcessesByName("PB");
+            if (procs.Length == 0) return;
+            System.Windows.Forms.SendKeys.SendWait("{F1}");
         }
         catch { }
     }
@@ -396,6 +430,8 @@ public class MainViewModel : INotifyPropertyChanged
         Tweaks.Add(new TweakFunction { Icon = "✅", Name = "Auto-Aceitar Partida", Description = "Aperta ENTER automaticamente na tela de match", Category = "UTILITÁRIOS", Module = "", Offset = "", OffBytes = "", OnBytes = "" });
         Tweaks.Add(new TweakFunction { Icon = "🔄", Name = "Reconectar Rápido", Description = "Reconecta ao processo PointBlank", Category = "UTILITÁRIOS", Module = "", Offset = "", OffBytes = "", OnBytes = "" });
         Tweaks.Add(new TweakFunction { Icon = "📊", Name = "Dashboard Sistema", Description = "Monitora CPU, RAM e Disco em tempo real", Category = "UTILITÁRIOS", Module = "", Offset = "", OffBytes = "", OnBytes = "" });
+        Tweaks.Add(new TweakFunction { Icon = "💤", Name = "Anti AFK", Description = "Simula movimento a cada 30s para não ser kickado", Category = "UTILITÁRIOS", Module = "", Offset = "", OffBytes = "", OnBytes = "" });
+        Tweaks.Add(new TweakFunction { Icon = "❤", Name = "Auto-Health", Description = "Usa kit médico automático a cada 5s", Category = "UTILITÁRIOS", Module = "", Offset = "", OffBytes = "", OnBytes = "" });
 
         // CONFIG
         Tweaks.Add(new TweakFunction { Icon = "🖥", Name = "Iniciar com Windows", Description = "Executa o app automaticamente na inicialização", Category = "CONFIG", Module = "", Offset = "", OffBytes = "", OnBytes = "" });
@@ -497,6 +533,20 @@ public class MainViewModel : INotifyPropertyChanged
         {
             if (tweak.IsActive) { _autoAcceptTimer.Start(); StatusMessage = "✔ Auto-Aceitar ativado! (verificando a cada 1s)"; }
             else { _autoAcceptTimer.Stop(); StatusMessage = "✘ Auto-Aceitar desativado."; }
+            SaveSettings(); return;
+        }
+
+        if (tweak.Name == "Anti AFK")
+        {
+            if (tweak.IsActive) { _antiAfkTimer.Start(); StatusMessage = "✔ Anti AFK ativado! (movimento a cada 30s)"; }
+            else { _antiAfkTimer.Stop(); StatusMessage = "✘ Anti AFK desativado."; }
+            SaveSettings(); return;
+        }
+
+        if (tweak.Name == "Auto-Health")
+        {
+            if (tweak.IsActive) { _autoHealthTimer.Start(); StatusMessage = "✔ Auto-Health ativado! (kit médico a cada 5s)"; }
+            else { _autoHealthTimer.Stop(); StatusMessage = "✘ Auto-Health desativado."; }
             SaveSettings(); return;
         }
 
