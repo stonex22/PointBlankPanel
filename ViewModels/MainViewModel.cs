@@ -430,8 +430,8 @@ public class MainViewModel : INotifyPropertyChanged
         Tweaks.Add(new TweakFunction { Icon = "✅", Name = "Auto-Aceitar Partida", Description = "Aperta ENTER automaticamente na tela de match", Category = "UTILITÁRIOS", Module = "", Offset = "", OffBytes = "", OnBytes = "" });
         Tweaks.Add(new TweakFunction { Icon = "🔄", Name = "Reconectar Rápido", Description = "Reconecta ao processo PointBlank", Category = "UTILITÁRIOS", Module = "", Offset = "", OffBytes = "", OnBytes = "" });
         Tweaks.Add(new TweakFunction { Icon = "📊", Name = "Dashboard Sistema", Description = "Monitora CPU, RAM e Disco em tempo real", Category = "UTILITÁRIOS", Module = "", Offset = "", OffBytes = "", OnBytes = "" });
-        Tweaks.Add(new TweakFunction { Icon = "💤", Name = "Anti AFK", Description = "Simula movimento a cada 30s para não ser kickado", Category = "UTILITÁRIOS", Module = "", Offset = "", OffBytes = "", OnBytes = "" });
-        Tweaks.Add(new TweakFunction { Icon = "❤", Name = "Auto-Health", Description = "Usa kit médico automático a cada 5s", Category = "UTILITÁRIOS", Module = "", Offset = "", OffBytes = "", OnBytes = "" });
+        Tweaks.Add(new TweakFunction { Icon = "💤", Name = "Anti AFK", Description = "Simula movimento a cada 30s para não ser kickado", Category = "VISUAL", Module = "", Offset = "", OffBytes = "", OnBytes = "" });
+        Tweaks.Add(new TweakFunction { Icon = "❤", Name = "Auto-Health", Description = "Usa kit médico automático a cada 5s", Category = "VISUAL", Module = "", Offset = "", OffBytes = "", OnBytes = "" });
 
         // CONFIG
         Tweaks.Add(new TweakFunction { Icon = "🖥", Name = "Iniciar com Windows", Description = "Executa o app automaticamente na inicialização", Category = "CONFIG", Module = "", Offset = "", OffBytes = "", OnBytes = "" });

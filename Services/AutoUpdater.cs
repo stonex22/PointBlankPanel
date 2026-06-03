@@ -44,7 +44,8 @@ public static class AutoUpdater
             var release = JsonSerializer.Deserialize<GitHubRelease>(json);
             if (release == null || release.Assets.Length == 0) return null;
             var tag = release.TagName.TrimStart('v');
-            if (tag == CurrentVersion) return null;
+            if (Version.TryParse(tag, out var tagVer) && Version.TryParse(CurrentVersion, out var curVer) && tagVer <= curVer)
+                return null;
             var asset = release.Assets[0];
             return new UpdateInfo
             {
